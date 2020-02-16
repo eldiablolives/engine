@@ -52,7 +52,7 @@ export class Files implements Component {
 
   async create(fileName: string, file: ReadableStream, fileStoreName?: string, meta?: any): Promise<any> {
     fileStoreName = fileStoreName || Object.getOwnPropertyNames(this.conf)[0];
-    
+
     return this.connectors[fileStoreName].create(file).then(result => {
       if (!this.conf[fileStoreName].track) {
         return Promise.resolve({ id: result.id });
@@ -87,15 +87,19 @@ export class Files implements Component {
     });
   }
 
-  async remove(fileStoreName: string, fileId: string): Promise<any> {
+  async remove(fileId: string, fileStoreName?: string): Promise<any> {
+    fileStoreName = fileStoreName || Object.getOwnPropertyNames(this.conf)[0];
     return this.connectors[fileStoreName].remove(fileId);
   }
 
-  async update(fileStoreName: string, fileId: string, fileDescriptor: any, file?: ReadableStream): Promise<any> {
+  async update(fileId: string, fileDescriptor: any, file?: ReadableStream): Promise<any> {
     return new Promise((resolve, reject) => {});
   }
 
-  async get(fileStoreName: string, fileId: string, includePayload?: boolean): Promise<any> {
+  async get(fileId: string, fileStoreName?: string, includePayload?: boolean): Promise<any> {
+    fileStoreName = fileStoreName || Object.getOwnPropertyNames(this.conf)[0];
+
+    // DEPRECATED: include payload
     if (includePayload) {
       return this.db.get('_files_' + fileStoreName, fileId).then(result => {
         return this.connectors[fileStoreName].get(result._uuid).then(payload => {
@@ -108,7 +112,8 @@ export class Files implements Component {
     }
   }
 
-  async payload(fileStoreName: string, fileId: string, options?: any): Promise<any> {
+  async payload(fileId: string, fileStoreName?: string): Promise<any> {
+    fileStoreName = fileStoreName || Object.getOwnPropertyNames(this.conf)[0];
     return this.connectors[fileStoreName].get(fileId);
   }
 }

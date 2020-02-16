@@ -23,7 +23,7 @@ describe('File', () => {
     ));
 
   it('should return', async () =>
-    expect(await engine.files.get('content', fileId))
+    expect(await engine.files.get(fileId))
       .to.have.property('name')
       .which.equals('test.jpg'));
 });
