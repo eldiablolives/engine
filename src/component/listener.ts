@@ -13,6 +13,7 @@ export class Listener implements Component {
   private services: Services | Registry;
   private server;
   private prefix;
+  private rawMode = false;
 
   constructor(private system: Engine) {
     logger = system.log.log('engine:listener');
@@ -21,6 +22,8 @@ export class Listener implements Component {
     this.port = conf.port || '80';
     this.services = system.services || system.registry;
     this.prefix = conf.service_prefix;
+    this.rawMode = conf.raw || false;
+
     if (this.prefix) {
       logger.debug(`Using ${this.prefix} service prefix`);
     }
@@ -34,8 +37,13 @@ export class Listener implements Component {
       const express = require('express')();
       express.disable('x-powered-by');
       express.use(cors());
-      express.use(bodyParser.json());
-      express.use(bodyParser.raw({ type: () => true }));
+
+      if (this.rawMode) {
+        express.use(bodyParser.raw({ type: () => true }));
+      } else {
+        express.use(bodyParser.json());
+      }
+
       express.use(
         bodyParser.urlencoded({
           extended: true
