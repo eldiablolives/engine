@@ -50,7 +50,9 @@ export class Files implements Component {
     return new Promise((resolve, reject) => {});
   }
 
-  async create(fileStoreName: string, fileName: string, file: ReadableStream, meta?: any): Promise<any> {
+  async create(fileName: string, file: ReadableStream, fileStoreName?: string, meta?: any): Promise<any> {
+    fileStoreName = fileStoreName || Object.getOwnPropertyNames(this.conf)[0];
+    
     return this.connectors[fileStoreName].create(file).then(result => {
       if (!this.conf[fileStoreName].track) {
         return Promise.resolve({ id: result.id });

@@ -39,6 +39,7 @@ export class Listener implements Component {
       express.use(cors());
 
       if (this.rawMode) {
+        logger.debug('Services will be running in RAW mode');
         express.use(bodyParser.raw({ type: () => true }));
       } else {
         express.use(bodyParser.json());

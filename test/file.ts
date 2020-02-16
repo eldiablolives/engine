@@ -18,11 +18,7 @@ describe('File', () => {
     console.log(
       'Created file id -> ' +
         (fileId = (
-          await engine.files.create(
-            'content',
-            'test.jpg',
-            fs.createReadStream(`${process.env.ENGINE_ROOT}/test/test.jpg`)
-          )
+          await engine.files.create('test.jpg', fs.createReadStream(`${process.env.ENGINE_ROOT}/test/test.jpg`))
         ).id)
     ));
 
