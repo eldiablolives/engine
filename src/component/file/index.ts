@@ -4,6 +4,7 @@ import { Component } from '../index';
 import { LocalProtocol } from './protocol/local';
 import { S3Protocol } from './protocol/s3';
 import { DB } from '../db/index';
+import { ReadStream } from 'fs';
 
 let logger;
 
@@ -112,7 +113,7 @@ export class Files implements Component {
     }
   }
 
-  async payload(fileId: string, fileStoreName?: string): Promise<any> {
+  async payload(fileId: string, fileStoreName?: string): Promise<ReadStream> {
     fileStoreName = fileStoreName || Object.getOwnPropertyNames(this.conf)[0];
     return this.connectors[fileStoreName].get(fileId);
   }

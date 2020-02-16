@@ -22,8 +22,15 @@ describe('File', () => {
         ).id)
     ));
 
-  it('should return', async () =>
+  it('should return file', async () =>
     expect(await engine.files.get(fileId))
       .to.have.property('name')
       .which.equals('test.jpg'));
+
+  it('should return payload', done => {
+    engine.files.payload(fileId).then(stream => {
+      const out = fs.createWriteStream(`${process.env.ENGINE_ROOT}/test/res.jpg`);
+      stream.pipe(out);
+    });
+  });
 });

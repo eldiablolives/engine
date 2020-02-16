@@ -1,6 +1,7 @@
 import { Engine } from '../../..';
 import { ApplicationError } from '../../../error';
 import { Counter } from './counter';
+import { ReadStream } from 'fs';
 
 let logger;
 
@@ -55,8 +56,8 @@ export class S3Protocol {
     return new Promise((resolve, reject) => {});
   }
 
-  async get(fileId: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+  async get(fileId: string): Promise<ReadStream> {
+    return new Promise<ReadStream>((resolve, reject) => {
       let params = { Bucket: this.conf.store, Key: fileId };
 
       const s3 = new this.aws.S3();
