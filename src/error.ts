@@ -27,7 +27,7 @@ const codes = {
   unsupported_method: 405, // When calling e.g. GET and its not supported
   data_error: 409,
   system_error: 500, // Internal deep error
-  configuration_error: 500, // Configuration error 
+  configuration_error: 500, // Configuration error
   service_error: 502 // When calling a remote service fails
 };
 
@@ -56,3 +56,15 @@ export class ApplicationError {
     });
   }
 }
+
+module.exports.send = (err, res, trace?: string) => {
+  if (err.send) {
+    return err.send(res);
+  }
+
+  new ApplicationError(
+    'sytem_error',
+    'Internal system error ocurred, administrator was notified',
+    trace || 'sys_int_helper'
+  ).send(res);
+};
