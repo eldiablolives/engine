@@ -135,7 +135,6 @@ export class Registry implements Component {
       const loadFile = this._root + sources[0] + resource;
       logger.debug('Trying to load handler: ' + resource + ' from ' + loadFile);
       const loaded = require(loadFile);
-      logger.debug(`Handler ${resource} loaded from ${loadFile}`);
       logger.info(`Handler ${resource} loaded`);
       return loaded.default;
     } catch (ex) {

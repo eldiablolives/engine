@@ -14,7 +14,7 @@ export class Session implements Component {
     logger = engine.log.log('engine:session');
   }
 
-  get(sessionId: string): Promise<any> {
+  async get(sessionId: string): Promise<any> {
     if (!sessionId) {
       return Promise.reject(new ApplicationError('not_found', 'Session not found', '9561517991'));
     }
@@ -24,7 +24,7 @@ export class Session implements Component {
     });
   }
 
-  set(sessionId: string, data: any): Promise<any> {
+  async set(sessionId: string, data: any): Promise<any> {
     if (!sessionId) {
       data = this.create(data);
       this.memory.set(`session-${data._uuid}`, data, SESSION_EXPIRY);
@@ -57,17 +57,17 @@ export class Session implements Component {
     return data;
   }
 
-  init(): Promise<any> {
+  async init(): Promise<any> {
     logger.info('Initialised');
     return Promise.resolve();
   }
 
-  release(): Promise<any> {
+  async release(): Promise<any> {
     logger.info('Released');
     return Promise.resolve();
   }
 
-  private encrypt(id: string): Promise<any> {
+  private async encrypt(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const crypto = require('crypto');
       const cipher = crypto.createCipher('aes192', this.engine.configuration.get('system').salt);
@@ -90,7 +90,7 @@ export class Session implements Component {
     });
   }
 
-  private decrypt(id: string): Promise<any> {
+  private async decrypt(id: string): Promise<any> {
     logger.debug(`Decrypting: ${id}`);
     return new Promise((resolve, reject) => {
       try {
